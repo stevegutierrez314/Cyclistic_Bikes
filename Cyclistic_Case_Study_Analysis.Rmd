@@ -1,0 +1,274 @@
+---
+title: "Cyclistic Case Study: Analysis"
+
+output:   
+  rmdformats::robobook:
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(rmdformats)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## 1. Document description
+Now that the data has been cleaned and processed, the data can be analyzed to find trends and insights. The goal of the case study is to find differences between people who purchase single-ride or full-day passes, referred to as "casual riders" and people who purchase the yearly memberships, referred to as "members."
+
+## 2. Loading packages and cleaned datasets
+
+```{r loading packages and cleaned datasets}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+
+all_trips_v3 <- read.csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/all_trips_v3.csv")
+
+spring_trips_v3 <- read.csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/spring_trips_v3.csv")
+
+summer_trips_v3 <- read.csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/summer_trips_v3.csv")
+
+autumn_trips_v3 <- read.csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/autumn_trips_v3.csv")
+
+winter_trips_v3 <- read.csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/winter_trips_v3.csv")
+```
+
+## 3. Analyze Phase
+
+### 3.1 Descriptive analysis on ride_length (all figures in seconds)
+Analyzing the ride_lengths to get a starting point of the types of rides users take.
+
+```{r analysis on ride_length}
+mean(all_trips_v3$ride_length_seconds) #straight average (total ride length / rides)
+median(all_trips_v3$ride_length_seconds) #midpoint number in the ascending array of ride lengths
+max(all_trips_v3$ride_length_seconds) #longest ride
+min(all_trips_v3$ride_length_seconds) #shortest ride
+```
+
+The steps above can be condensed to one line using summary() on the specific attribute.
+
+```{r condensed analysis on ride_length}
+summary(all_trips_v3$ride_length_seconds)
+```
+
+### 3.2 Compare members and casual users
+Let's start by comparing the ride_length of riders, comparing casual riders with members.
+
+```{r compare ride_length, casual vs member}
+aggregate(all_trips_v3$ride_length_seconds ~ all_trips_v3$member_casual, FUN = mean)
+aggregate(all_trips_v3$ride_length_seconds ~ all_trips_v3$member_casual, FUN = median)
+aggregate(all_trips_v3$ride_length_seconds ~ all_trips_v3$member_casual, FUN = max)
+aggregate(all_trips_v3$ride_length_seconds ~ all_trips_v3$member_casual, FUN = min)
+```
+
+See the average ride time by each day for members vs casual users
+```{r compare ride time, casual vs member}
+aggregate(all_trips_v3$ride_length_seconds ~ all_trips_v3$member_casual + all_trips_v3$day_of_week, FUN = mean)
+```
+
+Notice that the days of the week are out of order. Let's fix that.
+```{r fixing order of days of the week}
+all_trips_v3$day_of_week <- ordered(all_trips_v3$day_of_week, levels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
+```
+
+Now, let's run the average ride time by each day for members vs casual users
+```{r compare average ride time, casual vs member}
+aggregate(all_trips_v3$ride_length_seconds ~ all_trips_v3$member_casual + all_trips_v3$day_of_week, FUN = mean)
+```
+
+Analyze ridership data by type and weekday
+```{r compare day of week, casual vs member}
+all_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>%        #creates weekday field using wday()
+  group_by(member_casual, weekday) %>%                        #groups by usertype and weekday
+  summarize(number_of_rides = n(),                            #calculates the number of rides
+            average_duration = mean(ride_length_seconds)) %>% #calculates the average duration
+  arrange(member_casual, weekday)                             #sorts
+```
+
+## 4. Visualizations
+
+Let's visualize the total number of rides by rider type.
+```{r viz for total rides, casual vs member}
+all_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + 
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Total Number of Rides by Rider Type (Year)", x = "Weekday", y = "Number of Rides") + 
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 500000)) 
+
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type.png")
+```
+
+Let's visualize the average ride time by each day of members vs casual users
+```{r viz for average ride time per day, casual vs member }
+all_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)/60) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Average Ride Time By Rider Type (Year)", x = "Weekday", y = "Average Duration (Minutes)") +
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 45))
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type.png")
+```
+
+
+Let's create the same visuals for each season.
+```{r viz for average ride time per day, separated by season, casual vs member}
+spring_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + 
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Total Number of Rides by Rider Type (Spring)", x = "Weekday", y = "Number of Rides") + 
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 500000)) 
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_spring.png")
+
+spring_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)/60) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Average Ride Time By Rider Type (Spring)", x = "Weekday", y = "Average Duration (Minutes)") +
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 45))
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_spring.png")
+
+summer_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + 
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Total Number of Rides by Rider Type (Summer)", x = "Weekday", y = "Number of Rides") + 
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 500000)) 
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_summer.png")
+
+summer_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)/60) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Average Ride Time By Rider Type (Summer)", x = "Weekday", y = "Average Duration (Minutes)") +
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 45))
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_summer.png")
+
+autumn_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + 
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Total Number of Rides by Rider Type (Autumn)", x = "Weekday", y = "Number of Rides") + 
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 500000)) 
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_autumn.png")
+
+autumn_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)/60) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Average Ride Time By Rider Type (Autumn)", x = "Weekday", y = "Average Duration (Minutes)") +
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 45))
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_autumn.png")
+
+winter_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + 
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Total Number of Rides by Rider Type (Winter)", x = "Weekday", y = "Number of Rides") + 
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 500000)) 
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_winter.png")
+
+winter_trips_v3 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarize(number_of_rides = n(),
+            average_duration = mean(ride_length_seconds)/60) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge") + scale_y_continuous(labels = scales::comma) +
+  labs(title = "Average Ride Time By Rider Type (Winter)", x = "Weekday", y = "Average Duration (Minutes)") +
+  scale_fill_discrete(name = "") + coord_cartesian(ylim = c(0, 45))
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_winter.png")
+```
+
+Let's visualize the top 10 trips (start_station to end_station) by type of rider
+```{r viz for top 10 trips, casual vs member}
+all_trips_v3 %>% 
+  mutate(route = paste(start_station_name, " to ", end_station_name)) %>% 
+  group_by(member_casual, route) %>% 
+  summarize(number_of_rides = n()) %>% 
+  arrange(member_casual, desc(number_of_rides)) %>% 
+  top_n(10) %>% 
+  filter(member_casual == "member") %>% 
+  ggplot(mapping = aes(x = number_of_rides, y = reorder(route, number_of_rides))) + 
+  geom_col(position = "dodge") + scale_x_continuous(labels = scales::comma) +
+  labs(title = "Top 10 Routes for Members", x = "Number of Trips", y = "")
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/top_routes_members.png")
+
+all_trips_v3 %>% 
+  mutate(route = paste(start_station_name, " to ", end_station_name)) %>% 
+  group_by(member_casual, route) %>% 
+  summarize(number_of_rides = n()) %>% 
+  arrange(member_casual, desc(number_of_rides)) %>% 
+  top_n(10) %>% 
+  filter(member_casual == "casual") %>% 
+  ggplot(mapping = aes(x = number_of_rides, y = reorder(route, number_of_rides))) + 
+  geom_col(position = "dodge") + scale_x_continuous(labels = scales::comma) +
+  labs(title = "Top 10 Routes for Casual Riders", x = "Number of Trips", y = "")
+
+ggsave("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/top_routes_casuals.png")
+```
+
+## 5. Saving Analysis
+
+Export summary file for further analysis and create a csv file that we will visualize in Excel or Tableau.
+```{r export analysis}
+counts <- aggregate(all_trips_v3$ride_length_seconds ~ all_trips_v3$member_casual + 
+                      all_trips_v3$day_of_week, FUN = mean)
+
+write.csv(counts, file = "/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/avg_ride_length.csv")
+```
+
+Analysis Complete
+

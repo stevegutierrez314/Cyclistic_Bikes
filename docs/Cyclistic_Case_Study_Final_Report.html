@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
+
+    
+    
+    <title>Cyclistic Case Study: Final Report</title>
+
+        <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+        <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="site_libs/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="site_libs/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+        <script src="site_libs/navigation-1.1/tabsets.js"></script>
+        <link href="site_libs/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+        <script src="site_libs/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+        <link href="site_libs/robobook-0.1/robobook.css" rel="stylesheet" />
+        <link href="site_libs/robobook-0.1/robobook_fonts_embed.css" rel="stylesheet" />
+        <script src="site_libs/robobook-0.1/robobook.js"></script>
+    
+    
+    
+    
+    <!-- tabsets -->
+    <script>
+      $(document).ready(function () {
+	  window.buildTabsets("toc");
+      });
+      $(document).ready(function () {
+	  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+	      $(this).parent().toggleClass('nav-tabs-open')
+	  });
+      });
+    </script>
+
+    <!-- code folding -->
+    
+    <!-- code download -->
+    
+    <!-- tabsets dropdown -->
+
+    <style type="text/css">
+      .tabset-dropdown > .nav-tabs {
+	  display: inline-table;
+	  max-height: 500px;
+	  min-height: 44px;
+	  overflow-y: auto;
+	  background: white;
+	  border: 1px solid #ddd;
+	  border-radius: 4px;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+	  content: "&#xe258;";
+	  border: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active {
+	  display: block;
+      }
+
+      .tabset-dropdown > .nav-tabs > li.active a {
+  	  padding: 0 15px !important;
+      }
+
+      .tabset-dropdown > .nav-tabs > li > a,
+      .tabset-dropdown > .nav-tabs > li > a:focus,
+      .tabset-dropdown > .nav-tabs > li > a:hover {
+	  border: none;
+	  display: inline-block;
+	  border-radius: 4px;
+	  background-color: transparent;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+	  display: block;
+	  float: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li {
+	  display: none;
+	  margin-left: 0 !important;
+      }
+    </style>
+    
+</head>
+
+<body class="preload">
+
+   	
+            <!-- robobook start -->   
+   <div class="book with-summary">
+      <div class="book-summary">
+        <ul>
+          <li class="title">Cyclistic Case Study: Final Report</li>
+          <li class="divider"></li>
+        </ul>
+        <nav role="navigation" id="toc">
+          <ul>
+          <li><a href="#introduction">1. Introduction</a></li>
+          <li><a href="#process">2. Process</a></li>
+          <li><a href="#analysis">3. Analysis</a></li>
+          <li><a href="#summary-of-findings">4. Summary of Findings</a></li>
+          <li><a href="#recommendations-for-further-analysis">5. Recommendations for Further Analysis</a></li>
+          </ul>
+        </nav>
+        <ul class="authors">
+          <li class="divider"></li>
+                            </ul>     
+      </div>
+      <div class="book-body fixed">
+        <div class="body-inner">
+            <a class="btn pull-left js-toolbar-action toggle-sidebar" aria-label="Toggle Sidebar" title="Toggle Sidebar" href="#">
+              <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </a>
+            <div class="page-inner">
+              <section id="content" class="normal">
+      
+   
+      
+      <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Cyclistic Case Study</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li>
+        <a href="index.html">Home</a>
+      </li>
+      <li>
+        <a href="Cyclistic_Case_Study_Data_Cleaning.html">Data Cleaning</a>
+      </li>
+      <li>
+        <a href="Cyclistic_Case_Study_Analysis.html">Analysis Code</a>
+      </li>
+      <li>
+        <a href="Cyclistic_Case_Study_Final_Report.html">Final Report</a>
+      </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container -->
+      </div><!--/.navbar -->
+        
+      <h1 class="title">Cyclistic Case Study: Final Report</h1>
+      
+        
+
+   
+      
+   
+<!-- Don't indent these lines or it will mess pre blocks indentation --> 
+<div id="introduction" class="section level1">
+<h1>1. Introduction</h1>
+<p>In 2016, Cyclistic launched a successful bike-share offering. Since then, the program has grown to a fleet of 5,824 bicycles that are geotracked and locked into a network of 692 stations across Chicago. The bikes can be unlocked from one station and returned to any other station in the system anytime.</p>
+<p>Cyclistic’s finance analysts have concluded that annual members are much more profitable than casual riders. Although the pricing flexibility helps Cyclistic attract more customers, Moreno believes that maximizing the number of annual members will be key to future growth. Rather than creating a marketing campaign that targets all-new customers, Moreno believes there is a very good chance to convert casual riders into members. She notes that casual riders are already aware of the Cyclistic program and have chosen Cyclistic for their mobility needs.</p>
+<p>Moreno has set a clear goal: Design marketing strategies aimed at converting casual riders into annual members. In order to do that, however, the marketing analyst team needs to better understand how annual members and casual riders differ, why casual riders would buy a membership, and how digital media could affect their marketing tactics. Moreno and her team are interested in analyzing the Cyclistic historical bike trip data to identify trends.</p>
+</div>
+<div id="process" class="section level1">
+<h1>2. Process</h1>
+<p>Cyclistic collects data from all of the trips taken on their bikes, compiles them into monthly csv files, and provides their historical data for analysis. For the purposes of this study, only the data between October 2020 and August 2021 was used.</p>
+<p>Each month had 100,000 - 500,000 entries. Due to the large sizes of the files, R was chosen as the program for analysis. Each month’s file was cleaned separately to ensure that errors could be mitigated during the cleaning process. Additional columns were added to help with the future analysis, including data on the day of the week and the length (seconds) of each trip. Once all the monthly files were cleaned, the files were merged into one single file. Four files were also created to separate the data into the four seasons for future analysis.</p>
+</div>
+<div id="analysis" class="section level1">
+<h1>3. Analysis</h1>
+<div id="average-ride-time" class="section level3">
+<h3>3.1 Average Ride Time</h3>
+<p>As previously mentioned, there are two types of customers of Cyclistic Bikes. Casual riders are those who purchase single-trip passes or a daily pass. Members are those who purchase the yearly membership.</p>
+<p>There is a significant difference in the length of ride for the two types of riders. As shown below, the casual rider takes an average of 30-40 minutes per trip while members take 10-20 minutes per trip. This is true for each day of the week with slightly longer trips on the weekends and shorter trips on weekdays for both casual riders and members.</p>
+<p><img src="Visuals/average_ride_time_by_rider_type.png" /> After filtering data by season, there was no significant change between the seasons compared to the full year.</p>
+<p><img src="Visuals/average_ride_time_by_rider_type_spring.png" /> <img src="Visuals/average_ride_time_by_rider_type_summer.png" /> <img src="Visuals/average_ride_time_by_rider_type_autumn.png" /> <img src="Visuals/average_ride_time_by_rider_type_winter.png" /></p>
+</div>
+<div id="total-number-of-rides" class="section level3">
+<h3>3.2 Total Number of Rides</h3>
+<p>Looking at the total number of rides that Cyclistic customers take throughout the year, the data showed that the day of the week is a factor in determining which type of riders are using the bikes.</p>
+<p>The graph below shows that on Saturdays and Sundays, casual riders are the leading customers, counting for at least 70,000 more trips on Saturdays and almost 100,000 more trips on Sundays, aggegated across the whole year.</p>
+<p>However, during the week on Monday through Friday, the casual riders drop off significantly and the members become the top riders. For example, on Wednesdays, members account for about 150,000 more trips across the year.</p>
+<p><img src="Visuals/total_rides_by_rider_type.png" /></p>
+<p>This time, separating the year-long data into seasonal parts adds to the story. The graphs below show that while the seasonal changes do affect the total number of trips taken by Cyclistic customers, the members are more dependable than the casual riders. This reinforces the idea that getting more customers to convert to the yearly membership can have a positive impact on Cyclistic’s profits.</p>
+<p><img src="Visuals/total_rides_by_rider_type_spring.png" /> <img src="Visuals/total_rides_by_rider_type_summer.png" /> <img src="Visuals/total_rides_by_rider_type_autumn.png" /> <img src="Visuals/total_rides_by_rider_type_winter.png" /></p>
+</div>
+<div id="top-trip-routes" class="section level3">
+<h3>3.3 Top Trip Routes</h3>
+<p>Finally, analyzing the data by the station-to-station trip that each rider took over the year showed some a pattern that separates the casual rider from the member.</p>
+<p>Below are the top 10 routes take over the year for casual riders and the top 10 routes for the members.</p>
+<p>The graphs show that casual riders tend to pick up a bike at one station, take a trip, and then return the bike to the same station. So, they typically only use one station per trip.</p>
+<p>In contrast, the top trip routes for members include several route pairs where one route is the reverse of another route in the top 10 list. One explanation could be that members, for example, take a trip from home to work, then after work take the same trip in the opposite direction.</p>
+<p>Further analysis would be necessary to identify and confirm the route behavior of the two rider types.</p>
+<p><img src="Visuals/top_routes_casuals.png" /></p>
+<p><img src="Visuals/top_routes_members.png" /></p>
+</div>
+</div>
+<div id="summary-of-findings" class="section level1">
+<h1>4. Summary of Findings</h1>
+<p>This analysis uncovered three key differences between casual riders and members within the Cyclistic customer base.</p>
+<ul>
+<li><p>Time: Casual riders take longer trips, 30-40 minutes on average, while members take shorter trips, 10-15 minutes on average.</p></li>
+<li><p>Day: Casual riders account for more trips on Saturdays and Sundays. Members account for more trips on weekdays, Monday through Friday.</p></li>
+<li><p>Location: Casual riders tend to acquire and return the bikes to the same station. Members use two different stations for their trips.</p></li>
+</ul>
+<p>These three differences between casual riders and members should be the basis of a marketing campaign designed to convert casual riders into yearly members.</p>
+</div>
+<div id="recommendations-for-further-analysis" class="section level1">
+<h1>5. Recommendations for Further Analysis</h1>
+<p>While this analysis uncovered some key insights, furthur analysis would be beneficial.</p>
+<ul>
+<li><p>Track riders to uncover repeat customres. Currently, there is no data being collected to track individual riders. While privacy and safety procedures need to be followed, randomized rider numbers can help track riders across multiple trips to find new patterns in bike usage.</p></li>
+<li><p>Monitor customers on their purchases. Again, keeping with all privacy and saftey measures, Cyclistic can track customers through unidentifiable ids to track how many casual riders become members.</p></li>
+<li><p>Create a rolling 12-month dashboard to monitor changes between casual riders and members. This is especially helpful to see the changes before, during, and after Covid lockdown measures.</p></li>
+</ul>
+</div>
+
+   
+   
+           </section>
+  </div>
+  </div>
+  </div>
+  </div>
+      
+      
+
+  <script>
+    $(document).ready(function () {
+
+		// add bootstrap table styles to pandoc tables
+	$('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+		
+ 		
+	    });
+  </script>
+
+
+
+    <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+	document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+  
+</body>
+</html>

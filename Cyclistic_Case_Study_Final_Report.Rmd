@@ -1,0 +1,106 @@
+---
+title: "Cyclistic Case Study: Final Report"
+
+output:   
+  rmdformats::robobook:
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(rmdformats)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1. Introduction
+
+In 2016, Cyclistic launched a successful bike-share offering. Since then, the program has grown to a fleet of 5,824 bicycles that are geotracked and locked into a network of 692 stations across Chicago. The bikes can be unlocked from one station and returned to any other station in the system anytime.
+
+Cyclistic’s finance analysts have concluded that annual members are much more profitable than casual riders. Although the pricing flexibility helps Cyclistic attract more customers, Moreno believes that maximizing the number of annual members will be key to future growth. Rather than creating a marketing campaign that targets all-new customers, Moreno believes there is a very good chance to convert casual riders into members. She notes that casual riders are already aware of the Cyclistic program and have chosen Cyclistic for their mobility needs.
+
+Moreno has set a clear goal: Design marketing strategies aimed at converting casual riders into annual members. In order to do that, however, the marketing analyst team needs to better understand how annual members and casual riders differ, why casual riders would buy a membership, and how digital media could affect their marketing tactics. Moreno and her team are interested in analyzing the Cyclistic historical bike trip data to identify trends.
+
+# 2. Process
+
+Cyclistic collects data from all of the trips taken on their bikes, compiles them into monthly csv files, and provides their historical data for analysis. For the purposes of this study, only the data between October 2020 and August 2021 was used.
+
+Each month had 100,000 - 500,000 entries. Due to the large sizes of the files, R was chosen as the program for analysis. Each month's file was cleaned separately to ensure that errors could be mitigated during the cleaning process. Additional columns were added to help with the future analysis, including data on the day of the week and the length (seconds) of each trip. Once all the monthly files were cleaned, the files were merged into one single file. Four files were also created to separate the data into the four seasons for future analysis.
+
+# 3. Analysis
+
+### 3.1 Average Ride Time
+
+As previously mentioned, there are two types of customers of Cyclistic Bikes. Casual riders are those who purchase single-trip passes or a daily pass. Members are those who purchase the yearly membership.
+
+There is a significant difference in the length of ride for the two types of riders. As shown below, the casual rider takes an average of 30-40 minutes per trip while members take 10-20 minutes per trip. This is true for each day of the week with slightly longer trips on the weekends and shorter trips on weekdays for both casual riders and members.
+
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type.png)
+After filtering data by season, there was no significant change between the seasons compared to the full year.
+
+
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_spring.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_summer.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_autumn.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_winter.png)
+
+### 3.2 Total Number of Rides
+
+Looking at the total number of rides that Cyclistic customers take throughout the year, the data showed that the day of the week is a factor in determining which type of riders are using the bikes. 
+
+The graph below shows that on Saturdays and Sundays, casual riders are the leading customers, counting for at least 70,000 more trips on Saturdays and almost 100,000 more trips on Sundays, aggegated across the whole year.
+
+However, during the week on Monday through Friday, the casual riders drop off significantly and the members become the top riders. For example, on Wednesdays, members account for about 150,000 more trips across the year.
+
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type.png)
+
+This time, separating the year-long data into seasonal parts adds to the story. The graphs below show that while the seasonal changes do affect the total number of trips taken by Cyclistic customers, the members are more dependable than the casual riders. This reinforces the idea that getting more customers to convert to the yearly membership can have a positive impact on Cyclistic's profits.
+
+
+
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_spring.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_summer.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_autumn.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_winter.png)
+
+### 3.3 Top Trip Routes
+
+Finally, analyzing the data by the station-to-station trip that each rider took over the year showed some a pattern that separates the casual rider from the member.
+
+Below are the top 10 routes take over the year for casual riders and the top 10 routes for the members.
+
+The graphs show that casual riders tend to pick up a bike at one station, take a trip, and then return the bike to the same station. So, they typically only use one station per trip.
+
+In contrast, the top trip routes for members include several route pairs where one route is the reverse of another route in the top 10 list. One explanation could be that members, for example, take a trip from home to work, then after work take the same trip in the opposite direction.
+
+Further analysis would be necessary to identify and confirm the route behavior of the two rider types.
+
+
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/top_routes_casuals.png)
+
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/top_routes_members.png)
+
+# 4. Summary of Findings
+
+This analysis uncovered three key differences between casual riders and members within the Cyclistic customer base.
+
+* Time: Casual riders take longer trips, 30-40 minutes on average, while members take shorter trips, 10-15 minutes on average.
+
+* Day: Casual riders account for more trips on Saturdays and Sundays. Members account for more trips on weekdays, Monday through Friday.
+
+* Location: Casual riders tend to acquire and return the bikes to the same station. Members use two different stations for their trips.
+
+These three differences between casual riders and members should be the basis of a marketing campaign designed to convert casual riders into yearly members.
+
+
+# 5. Recommendations for Further Analysis
+
+While this analysis uncovered some key insights, furthur analysis would be beneficial.
+
+* Track riders to uncover repeat customres. Currently, there is no data being collected to track individual riders. While privacy and safety procedures need to be followed, randomized rider numbers can help track riders across multiple trips to find new patterns in bike usage.
+
+* Monitor customers on their purchases. Again, keeping with all privacy and saftey measures, Cyclistic can track customers through unidentifiable ids to track how many casual riders become members.
+
+* Create a rolling 12-month dashboard to monitor changes between casual riders and members. This is especially helpful to see the changes before, during, and after Covid lockdown measures.
+
+

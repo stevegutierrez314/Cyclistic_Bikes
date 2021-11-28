@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
+
+    
+    
+    <title>Cyclistic Case Study: Data Cleaning</title>
+
+        <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+        <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="site_libs/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="site_libs/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+        <script src="site_libs/navigation-1.1/tabsets.js"></script>
+        <link href="site_libs/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+        <script src="site_libs/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+        <link href="site_libs/robobook-0.1/robobook.css" rel="stylesheet" />
+        <link href="site_libs/robobook-0.1/robobook_fonts_embed.css" rel="stylesheet" />
+        <script src="site_libs/robobook-0.1/robobook.js"></script>
+    
+    
+        <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          background-color: #ffffff;
+          color: #a0a0a0;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+      div.sourceCode
+        { color: #1f1c1b; background-color: #ffffff; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span { color: #1f1c1b; } /* Normal */
+      code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+      code span.an { color: #ca60ca; } /* Annotation */
+      code span.at { color: #0057ae; } /* Attribute */
+      code span.bn { color: #b08000; } /* BaseN */
+      code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+      code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #924c9d; } /* Char */
+      code span.cn { color: #aa5500; } /* Constant */
+      code span.co { color: #898887; } /* Comment */
+      code span.cv { color: #0095ff; } /* CommentVar */
+      code span.do { color: #607880; } /* Documentation */
+      code span.dt { color: #0057ae; } /* DataType */
+      code span.dv { color: #b08000; } /* DecVal */
+      code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+      code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+      code span.fl { color: #b08000; } /* Float */
+      code span.fu { color: #644a9b; } /* Function */
+      code span.im { color: #ff5500; } /* Import */
+      code span.in { color: #b08000; } /* Information */
+      code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+      code span.op { color: #1f1c1b; } /* Operator */
+      code span.ot { color: #006e28; } /* Other */
+      code span.pp { color: #006e28; } /* Preprocessor */
+      code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+      code span.sc { color: #3daee9; } /* SpecialChar */
+      code span.ss { color: #ff5500; } /* SpecialString */
+      code span.st { color: #bf0303; } /* String */
+      code span.va { color: #0057ae; } /* Variable */
+      code span.vs { color: #bf0303; } /* VerbatimString */
+      code span.wa { color: #bf0303; } /* Warning */
+    </style>
+    
+    
+    <!-- tabsets -->
+    <script>
+      $(document).ready(function () {
+	  window.buildTabsets("toc");
+      });
+      $(document).ready(function () {
+	  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+	      $(this).parent().toggleClass('nav-tabs-open')
+	  });
+      });
+    </script>
+
+    <!-- code folding -->
+    
+    <!-- code download -->
+    
+    <!-- tabsets dropdown -->
+
+    <style type="text/css">
+      .tabset-dropdown > .nav-tabs {
+	  display: inline-table;
+	  max-height: 500px;
+	  min-height: 44px;
+	  overflow-y: auto;
+	  background: white;
+	  border: 1px solid #ddd;
+	  border-radius: 4px;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+	  content: "&#xe258;";
+	  border: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active {
+	  display: block;
+      }
+
+      .tabset-dropdown > .nav-tabs > li.active a {
+  	  padding: 0 15px !important;
+      }
+
+      .tabset-dropdown > .nav-tabs > li > a,
+      .tabset-dropdown > .nav-tabs > li > a:focus,
+      .tabset-dropdown > .nav-tabs > li > a:hover {
+	  border: none;
+	  display: inline-block;
+	  border-radius: 4px;
+	  background-color: transparent;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+	  display: block;
+	  float: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li {
+	  display: none;
+	  margin-left: 0 !important;
+      }
+    </style>
+    
+</head>
+
+<body class="preload">
+
+   	
+            <!-- robobook start -->   
+   <div class="book with-summary">
+      <div class="book-summary">
+        <ul>
+          <li class="title">Cyclistic Case Study: Data Cleaning</li>
+          <li class="divider"></li>
+        </ul>
+        <nav role="navigation" id="toc">
+          <ul>
+          <li><a href="#document-description">1. Document Description</a></li>
+          <li><a href="#loading-packages">2. Loading Packages</a></li>
+          <li><a href="#preparing-phase">3. Preparing Phase</a></li>
+          <li><a href="#process-phase">4. Process Phase</a></li>
+          </ul>
+        </nav>
+        <ul class="authors">
+          <li class="divider"></li>
+                            </ul>     
+      </div>
+      <div class="book-body fixed">
+        <div class="body-inner">
+            <a class="btn pull-left js-toolbar-action toggle-sidebar" aria-label="Toggle Sidebar" title="Toggle Sidebar" href="#">
+              <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </a>
+            <div class="page-inner">
+              <section id="content" class="normal">
+      
+   
+      
+      <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Cyclistic Case Study</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li>
+        <a href="index.html">Home</a>
+      </li>
+      <li>
+        <a href="Cyclistic_Case_Study_Data_Cleaning.html">Data Cleaning</a>
+      </li>
+      <li>
+        <a href="Cyclistic_Case_Study_Analysis.html">Analysis Code</a>
+      </li>
+      <li>
+        <a href="Cyclistic_Case_Study_Final_Report.html">Final Report</a>
+      </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container -->
+      </div><!--/.navbar -->
+        
+      <h1 class="title">Cyclistic Case Study: Data Cleaning</h1>
+      
+        
+
+   
+      
+   
+<!-- Don't indent these lines or it will mess pre blocks indentation --> 
+<div id="document-description" class="section level2">
+<h2>1. Document Description</h2>
+<p>This document details the steps taken in cleaning and processing the raw datasets in preparation for analysis. Though this case study involved a fictional company named Cycclistic Bikes, real data was used from the Chicago based bikeshare company Divvy. The raw data, descriptions, and licensing informaton can be found at the following pages:</p>
+<ul>
+<li><a href="https://www.divvybikes.com/system-data">Divvy Data</a></li>
+<li><a href="https://www.divvybikes.com/data-license-agreement">Divvy Data License Agreement</a></li>
+</ul>
+</div>
+<div id="loading-packages" class="section level2">
+<h2>2. Loading Packages</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code></pre></div>
+</div>
+<div id="preparing-phase" class="section level2">
+<h2>3. Preparing Phase</h2>
+<p>For this case study, one year’s worth of data was considered. The data collected from Divvy were the files of trip data, collected in monthly chunks, from October 2020 to August 2021.</p>
+<div id="creating-dataframes-from-original-csv-files" class="section level3">
+<h3>3.1 Creating dataframes from original csv files</h3>
+<p>The data is collected into monthly files. The following naming convention will is used for the files:</p>
+<p>“trip_data_[year]][month]”.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>trip_data_202109 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202109-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>trip_data_202108 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202108-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>trip_data_202107 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202107-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>trip_data_202106 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202106-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>trip_data_202105 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202105-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>trip_data_202104 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202104-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>trip_data_202103 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202103-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>trip_data_202102 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202102-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>trip_data_202101 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202101-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>trip_data_202012 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202012-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>trip_data_202011 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202011-divvy-tripdata.csv&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>trip_data_202010 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202010-divvy-tripdata.csv&quot;</span>)</span></code></pre></div>
+</div>
+<div id="overview-of-data" class="section level3">
+<h3>3.2 Overview of data</h3>
+<p>Inspecting the data frames, looking for any inconsistencies and gaining an understanding of the scope of data collected, including column names, data types, and general structures of the data.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trip_data_202010)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trip_data_202109)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202010)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202109)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(trip_data_202010)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(trip_data_202109)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202010)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202109)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(trip_data_202010, <span class="at">total_member =</span> <span class="fu">sum</span>(trip_data_202010<span class="sc">$</span>member_casual <span class="sc">==</span> <span class="st">&#39;member&#39;</span>), <span class="at">total_casual =</span> <span class="fu">sum</span>(trip_data_202010<span class="sc">$</span>member_casual <span class="sc">==</span> <span class="st">&#39;casual&#39;</span>))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(trip_data_202109, <span class="at">total_member =</span> <span class="fu">sum</span>(trip_data_202109<span class="sc">$</span>member_casual <span class="sc">==</span> <span class="st">&#39;member&#39;</span>), <span class="at">total_casual =</span> <span class="fu">sum</span>(trip_data_202109<span class="sc">$</span>member_casual <span class="sc">==</span> <span class="st">&#39;casual&#39;</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="process-phase" class="section level2">
+<h2>4. Process Phase</h2>
+<div id="adding-column-for-ride_length-to-each-file" class="section level3">
+<h3>4.1 Adding column for ride_length to each file</h3>
+<p>Since there was no data for the lenght of a single trip, a new column needs to be created from the existing start time and end time of the trips.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>trip_data_202010 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202010, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>trip_data_202011 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202011, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>trip_data_202012 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202012, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>trip_data_202101 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202101, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>trip_data_202102 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202102, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>trip_data_202103 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202103, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>trip_data_202104 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202104, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>trip_data_202105 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202105, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>trip_data_202106 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202106, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>trip_data_202107 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202107, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>trip_data_202108 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202108, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="do">## trip_data_202109 &lt;- mutate(trip_data_202109, ride_length = seconds_to_period(ended_at - started_at))</span></span></code></pre></div>
+<p>The file for the trip_data_202109 data stores start times and end times as characters. These need to be changed to datetime values before adding the ride_length column.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>example_trip_data <span class="ot">&lt;-</span> trip_data_202109 <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">started_at_new =</span> <span class="fu">as.POSIXct</span>(trip_data_202109<span class="sc">$</span>started_at, <span class="at">tz=</span><span class="st">&quot;UTC&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ended_at_new =</span> <span class="fu">as.POSIXct</span>(trip_data_202109<span class="sc">$</span>ended_at, <span class="at">tz=</span><span class="st">&quot;UTC&quot;</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>trip_data_202109 <span class="ot">&lt;-</span> <span class="fu">subset</span>(example_trip_data, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(started_at, ended_at)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(<span class="at">started_at =</span> started_at_new, <span class="at">.after =</span> rideable_type) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(<span class="at">ended_at =</span> ended_at_new, <span class="at">.after =</span> started_at)</span></code></pre></div>
+<p>Finishing the previous step, adding column for ride_length to 202109</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>trip_data_202109 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202109, <span class="at">ride_length =</span> <span class="fu">seconds_to_period</span>(ended_at <span class="sc">-</span> started_at))</span></code></pre></div>
+</div>
+<div id="adding-column-for-day_of_week-to-each-file" class="section level3">
+<h3>4.2 Adding column for day_of_week to each file</h3>
+<p>In order to do analysis of data by day of week, we will need a numerical representation of each day. Adding a column to each file with the following meaning: 1 = Sunday, 2 = Monday, … 7 = Saturday</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trip_data_202010 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202010, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202010<span class="sc">$</span>started_at))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>trip_data_202011 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202011, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202011<span class="sc">$</span>started_at))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>trip_data_202012 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202012, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202012<span class="sc">$</span>started_at))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>trip_data_202101 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202101, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202101<span class="sc">$</span>started_at))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>trip_data_202102 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202102, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202102<span class="sc">$</span>started_at))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>trip_data_202103 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202103, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202103<span class="sc">$</span>started_at))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>trip_data_202104 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202104, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202104<span class="sc">$</span>started_at))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>trip_data_202105 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202105, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202105<span class="sc">$</span>started_at))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>trip_data_202106 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202106, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202106<span class="sc">$</span>started_at))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>trip_data_202107 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202107, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202107<span class="sc">$</span>started_at))</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>trip_data_202108 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202108, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202108<span class="sc">$</span>started_at))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>trip_data_202109 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202109, <span class="at">day_of_week =</span> <span class="fu">wday</span>(trip_data_202109<span class="sc">$</span>started_at))</span></code></pre></div>
+</div>
+<div id="checking-column-names-for-consistency" class="section level3">
+<h3>4.3 Checking column names for consistency</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202010)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202011)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202012)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202101)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202102)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202103)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202104)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202105)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202106)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202107)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202108)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(trip_data_202109)</span></code></pre></div>
+<p>All column names are consistent. Inspecting data frames for incongruities.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202010) <span class="co">#station ids are double, change to char</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202011) <span class="co">#station ids are double, change to char</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202012)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202101)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202102)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202103)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202104)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202105)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202106)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202107)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202108)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trip_data_202109)</span></code></pre></div>
+<p>The datasets for 202010 and 202011 have station ids set as double data types. These need to be converted to char data types so that they can merge correctly.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>trip_data_202010 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202010, <span class="at">start_station_id =</span> <span class="fu">as.character</span>(start_station_id), </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">end_station_id =</span> <span class="fu">as.character</span>(end_station_id))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>trip_data_202011 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(trip_data_202011, <span class="at">start_station_id =</span> <span class="fu">as.character</span>(start_station_id),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">end_station_id =</span> <span class="fu">as.character</span>(end_station_id))</span></code></pre></div>
+</div>
+<div id="merge-individual-months-into-one-single-data-frame" class="section level3">
+<h3>4.4 Merge individual months into one single data frame</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>all_trips <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(trip_data_202010, trip_data_202011, trip_data_202012, trip_data_202101, trip_data_202102, trip_data_202103, trip_data_202104, trip_data_202105, trip_data_202106, trip_data_202107, trip_data_202108, trip_data_202109)</span></code></pre></div>
+</div>
+<div id="creating-seasonal-data-frames" class="section level3">
+<h3>4.5 Creating seasonal data frames</h3>
+<p>In preparation for seasonal analysis, data frames for each season need to be created.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>spring_trips <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(trip_data_202103, trip_data_202104, trip_data_202105)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>summer_trips <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(trip_data_202106, trip_data_202107, trip_data_202108)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>autumn_trips <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(trip_data_202010, trip_data_202011)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>winter_trips <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(trip_data_202012, trip_data_202101, trip_data_202102)</span></code></pre></div>
+</div>
+<div id="clean-up-and-organize-data-to-prepare-for-analysis" class="section level3">
+<h3>4.6 Clean up and organize data to prepare for analysis</h3>
+<p>Inspecting the merged data frame all_trips for any issues.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(all_trips)  <span class="co">#List of column names</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(all_trips)  <span class="co">#How many rows are in data frame?</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(all_trips)  <span class="co">#Dimensions of the data frame?</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(all_trips)  <span class="co">#See the first 6 rows of data frame.  </span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(all_trips)  <span class="co">#See the last 6 rows of data frame.</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(all_trips)  <span class="co">#See list of columns and data types (numeric, character, etc)</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(all_trips)  <span class="co">#Statistical summary of data. Mainly for numerics</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_trips<span class="sc">$</span>rideable_type)  <span class="co">#Count of each type of bike used</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_trips<span class="sc">$</span>day_of_week)  <span class="co">#Count of total rides per day of week</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_trips<span class="sc">$</span>member_casual)  <span class="co">#Count of total casual and member riders</span></span></code></pre></div>
+<p>There are a few problems we will need to fix: * (1) The data can only be aggregated at the rider level, which is too granular. We will need to add some additional columns – such as day, month, year – that provide additional opportunities to aggregate the data. * (2) We will want to add “ride_length” to the entire data frame for consistency. * (3) There are rides with ride_length values that are negative. We will want to delete those rides.</p>
+<p>Fixing issue (1) - Add columns for day, month, year</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>all_trips<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(all_trips<span class="sc">$</span>started_at) <span class="co">#The default format is yyyy-mm-dd</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>all_trips<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(all_trips<span class="sc">$</span>date), <span class="st">&quot;%m&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>all_trips<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(all_trips<span class="sc">$</span>date), <span class="st">&quot;%d&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>all_trips<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(all_trips<span class="sc">$</span>date), <span class="st">&quot;%Y&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>all_trips<span class="sc">$</span>day_of_week <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(all_trips<span class="sc">$</span>date), <span class="st">&quot;%A&quot;</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>all_trips <span class="ot">&lt;-</span> <span class="fu">mutate</span>(all_trips, <span class="at">day_of_week_as_number =</span> <span class="fu">wday</span>(all_trips<span class="sc">$</span>started_at))</span></code></pre></div>
+<p>Doing the same for the seasonal data frames</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>spring_trips<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(spring_trips<span class="sc">$</span>started_at) <span class="co">#The default format is yyyy-mm-dd</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>spring_trips<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(spring_trips<span class="sc">$</span>date), <span class="st">&quot;%m&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>spring_trips<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(spring_trips<span class="sc">$</span>date), <span class="st">&quot;%d&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>spring_trips<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(spring_trips<span class="sc">$</span>date), <span class="st">&quot;%Y&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>spring_trips<span class="sc">$</span>day_of_week <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(spring_trips<span class="sc">$</span>date), <span class="st">&quot;%A&quot;</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>spring_trips <span class="ot">&lt;-</span> <span class="fu">mutate</span>(spring_trips, <span class="at">day_of_week_as_number =</span> <span class="fu">wday</span>(spring_trips<span class="sc">$</span>started_at))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>summer_trips<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(summer_trips<span class="sc">$</span>started_at) <span class="co">#The default format is yyyy-mm-dd</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>summer_trips<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(summer_trips<span class="sc">$</span>date), <span class="st">&quot;%m&quot;</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>summer_trips<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(summer_trips<span class="sc">$</span>date), <span class="st">&quot;%d&quot;</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>summer_trips<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(summer_trips<span class="sc">$</span>date), <span class="st">&quot;%Y&quot;</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>summer_trips<span class="sc">$</span>day_of_week <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(summer_trips<span class="sc">$</span>date), <span class="st">&quot;%A&quot;</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>summer_trips <span class="ot">&lt;-</span> <span class="fu">mutate</span>(summer_trips, <span class="at">day_of_week_as_number =</span> <span class="fu">wday</span>(summer_trips<span class="sc">$</span>started_at))</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>autumn_trips<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(autumn_trips<span class="sc">$</span>started_at) <span class="co">#The default format is yyyy-mm-dd</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>autumn_trips<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(autumn_trips<span class="sc">$</span>date), <span class="st">&quot;%m&quot;</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>autumn_trips<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(autumn_trips<span class="sc">$</span>date), <span class="st">&quot;%d&quot;</span>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>autumn_trips<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(autumn_trips<span class="sc">$</span>date), <span class="st">&quot;%Y&quot;</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>autumn_trips<span class="sc">$</span>day_of_week <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(autumn_trips<span class="sc">$</span>date), <span class="st">&quot;%A&quot;</span>)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>autumn_trips <span class="ot">&lt;-</span> <span class="fu">mutate</span>(autumn_trips, <span class="at">day_of_week_as_number =</span> <span class="fu">wday</span>(autumn_trips<span class="sc">$</span>started_at))</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>winter_trips<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(winter_trips<span class="sc">$</span>started_at) <span class="co">#The default format is yyyy-mm-dd</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>winter_trips<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(winter_trips<span class="sc">$</span>date), <span class="st">&quot;%m&quot;</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>winter_trips<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(winter_trips<span class="sc">$</span>date), <span class="st">&quot;%d&quot;</span>)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>winter_trips<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(winter_trips<span class="sc">$</span>date), <span class="st">&quot;%Y&quot;</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>winter_trips<span class="sc">$</span>day_of_week <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(winter_trips<span class="sc">$</span>date), <span class="st">&quot;%A&quot;</span>)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>winter_trips <span class="ot">&lt;-</span> <span class="fu">mutate</span>(winter_trips, <span class="at">day_of_week_as_number =</span> <span class="fu">wday</span>(winter_trips<span class="sc">$</span>started_at))</span></code></pre></div>
+<p>Inspect the structure of the columns</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(all_trips)</span></code></pre></div>
+<p>Add a “ride_length” calculation to all_trips (in seconds)</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>all_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">difftime</span>(all_trips<span class="sc">$</span>ended_at,all_trips<span class="sc">$</span>started_at)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>spring_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">difftime</span>(spring_trips<span class="sc">$</span>ended_at,spring_trips<span class="sc">$</span>started_at)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>summer_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">difftime</span>(summer_trips<span class="sc">$</span>ended_at,summer_trips<span class="sc">$</span>started_at)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>autumn_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">difftime</span>(autumn_trips<span class="sc">$</span>ended_at,autumn_trips<span class="sc">$</span>started_at)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>winter_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">difftime</span>(winter_trips<span class="sc">$</span>ended_at,winter_trips<span class="sc">$</span>started_at)</span></code></pre></div>
+<p>Convert “ride_length” from Factor to numeric so we can run calculations on the data.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.factor</span>(all_trips<span class="sc">$</span>ride_length_seconds)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>all_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(all_trips<span class="sc">$</span>ride_length_seconds))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">is.numeric</span>(all_trips<span class="sc">$</span>ride_length_seconds)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>spring_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(spring_trips<span class="sc">$</span>ride_length_seconds))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>summer_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(summer_trips<span class="sc">$</span>ride_length_seconds))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>autumn_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(autumn_trips<span class="sc">$</span>ride_length_seconds))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>winter_trips<span class="sc">$</span>ride_length_seconds <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(winter_trips<span class="sc">$</span>ride_length_seconds))</span></code></pre></div>
+</div>
+<div id="remove-bad-data" class="section level3">
+<h3>4.7 Remove “bad” data</h3>
+<p>The data frame includes thousands of entries where bikes were taken out of docks and checked for quality by Divvy or where the ride_length was negative. A new version of the data frame (v2) was created by removing quality check trips. A new version of the data frame (v3) was created by removing any null trips.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(all_trips, ride_length_seconds <span class="sc">&lt;</span> <span class="dv">0</span>) <span class="co"># Shows that thousands of trips have negative ride_length</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_trips<span class="sc">$</span>start_station_name) <span class="co"># Looking for staff maintenance trips</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>all_trips_v2 <span class="ot">&lt;-</span> all_trips[<span class="sc">!</span>(all_trips<span class="sc">$</span>start_station_name <span class="sc">==</span> <span class="st">&quot;HQ QR&quot;</span> <span class="sc">|</span> all_trips<span class="sc">$</span>ride_length<span class="sc">&lt;</span><span class="dv">0</span>),]</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># That created rows of NA, so we now need to remove them.</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>all_trips_v3 <span class="ot">&lt;-</span> all_trips_v2 <span class="sc">%&gt;%</span>  <span class="fu">drop_na</span>()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>spring_trips_v2 <span class="ot">&lt;-</span> spring_trips[<span class="sc">!</span>(spring_trips<span class="sc">$</span>start_station_name <span class="sc">==</span> <span class="st">&quot;HQ QR&quot;</span> <span class="sc">|</span> spring_trips<span class="sc">$</span>ride_length<span class="sc">&lt;</span><span class="dv">0</span>),]</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># That created rows of NA, so we now need to remove them.</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>spring_trips_v3 <span class="ot">&lt;-</span> spring_trips_v2 <span class="sc">%&gt;%</span>  <span class="fu">drop_na</span>()</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>summer_trips_v2 <span class="ot">&lt;-</span> summer_trips[<span class="sc">!</span>(summer_trips<span class="sc">$</span>start_station_name <span class="sc">==</span> <span class="st">&quot;HQ QR&quot;</span> <span class="sc">|</span> summer_trips<span class="sc">$</span>ride_length<span class="sc">&lt;</span><span class="dv">0</span>),]</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># That created rows of NA, so we now need to remove them.</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>summer_trips_v3 <span class="ot">&lt;-</span> summer_trips_v2 <span class="sc">%&gt;%</span>  <span class="fu">drop_na</span>()</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>autumn_trips_v2 <span class="ot">&lt;-</span> autumn_trips[<span class="sc">!</span>(autumn_trips<span class="sc">$</span>start_station_name <span class="sc">==</span> <span class="st">&quot;HQ QR&quot;</span> <span class="sc">|</span> autumn_trips<span class="sc">$</span>ride_length<span class="sc">&lt;</span><span class="dv">0</span>),]</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># That created rows of NA, so we now need to remove them.</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>autumn_trips_v3 <span class="ot">&lt;-</span> autumn_trips_v2 <span class="sc">%&gt;%</span>  <span class="fu">drop_na</span>()</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>winter_trips_v2 <span class="ot">&lt;-</span> winter_trips[<span class="sc">!</span>(winter_trips<span class="sc">$</span>start_station_name <span class="sc">==</span> <span class="st">&quot;HQ QR&quot;</span> <span class="sc">|</span> winter_trips<span class="sc">$</span>ride_length<span class="sc">&lt;</span><span class="dv">0</span>),]</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co"># That created rows of NA, so we now need to remove them.</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>winter_trips_v3 <span class="ot">&lt;-</span> winter_trips_v2 <span class="sc">%&gt;%</span>  <span class="fu">drop_na</span>()</span></code></pre></div>
+</div>
+<div id="saving-cleaned-and-useful-datasets" class="section level3">
+<h3>4.8 Saving cleaned and useful datasets</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all_trips_v3, <span class="at">file =</span> <span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/all_trips_v3.csv&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(spring_trips_v3, <span class="at">file =</span> <span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/spring_trips_v3.csv&quot;</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(summer_trips_v3, <span class="at">file =</span> <span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/summer_trips_v3.csv&quot;</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(autumn_trips_v3, <span class="at">file =</span> <span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/autumn_trips_v3.csv&quot;</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(winter_trips_v3, <span class="at">file =</span> <span class="st">&quot;/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/winter_trips_v3.csv&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+
+   
+   
+           </section>
+  </div>
+  </div>
+  </div>
+  </div>
+      
+      
+
+  <script>
+    $(document).ready(function () {
+
+		// add bootstrap table styles to pandoc tables
+	$('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+		
+ 		
+	    });
+  </script>
+
+
+
+    <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+	document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+  
+</body>
+</html>

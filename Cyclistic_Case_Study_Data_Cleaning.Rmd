@@ -1,0 +1,335 @@
+---
+title: "Cyclistic Case Study: Data Cleaning"
+output:   
+  rmdformats::robobook:
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=TRUE,
+               prompt=FALSE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE, 
+               results="hide")
+opts_knit$set(width=75)
+##knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Document Description
+This document details the steps taken in cleaning and processing the raw datasets in preparation for analysis. Though this case study involved a fictional company named Cycclistic Bikes, real data was used from the Chicago based bikeshare company Divvy. The raw data, descriptions, and licensing informaton can be found at the following pages:
+
+* [Divvy Data](https://www.divvybikes.com/system-data)
+* [Divvy Data License Agreement](https://www.divvybikes.com/data-license-agreement)
+
+
+## 2. Loading Packages
+```{r load packages}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+```
+
+
+## 3. Preparing Phase
+
+For this case study, one year's worth of data was considered. The data collected from Divvy were the files of trip data, collected in monthly chunks, from October 2020 to August 2021.
+
+### 3.1 Creating dataframes from original csv files
+The data is collected into monthly files. The following naming convention will is used for the files:
+
+"trip_data_[year]][month]".
+
+```{r creating dataframes from original csv files}
+trip_data_202109 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202109-divvy-tripdata.csv")
+trip_data_202108 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202108-divvy-tripdata.csv")
+trip_data_202107 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202107-divvy-tripdata.csv")
+trip_data_202106 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202106-divvy-tripdata.csv")
+trip_data_202105 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202105-divvy-tripdata.csv")
+trip_data_202104 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202104-divvy-tripdata.csv")
+trip_data_202103 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202103-divvy-tripdata.csv")
+trip_data_202102 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202102-divvy-tripdata.csv")
+trip_data_202101 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202101-divvy-tripdata.csv")
+trip_data_202012 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202012-divvy-tripdata.csv")
+trip_data_202011 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202011-divvy-tripdata.csv")
+trip_data_202010 <- read_csv("/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/202010-divvy-tripdata.csv")
+```
+
+### 3.2 Overview of data
+Inspecting the data frames, looking for any inconsistencies and gaining an understanding of the scope of data collected, including column names, data types, and general structures of the data.
+
+```{r overview of data}
+head(trip_data_202010)
+head(trip_data_202109)
+colnames(trip_data_202010)
+colnames(trip_data_202109)
+glimpse(trip_data_202010)
+glimpse(trip_data_202109)
+str(trip_data_202010)
+str(trip_data_202109)
+
+summarize(trip_data_202010, total_member = sum(trip_data_202010$member_casual == 'member'), total_casual = sum(trip_data_202010$member_casual == 'casual'))
+summarize(trip_data_202109, total_member = sum(trip_data_202109$member_casual == 'member'), total_casual = sum(trip_data_202109$member_casual == 'casual'))
+```
+
+
+## 4. Process Phase
+
+### 4.1 Adding column for ride_length to each file
+Since there was no data for the lenght of a single trip, a new column needs to be created from the existing start time and end time of the trips.
+
+```{r adding ride_length}
+trip_data_202010 <- mutate(trip_data_202010, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202011 <- mutate(trip_data_202011, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202012 <- mutate(trip_data_202012, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202101 <- mutate(trip_data_202101, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202102 <- mutate(trip_data_202102, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202103 <- mutate(trip_data_202103, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202104 <- mutate(trip_data_202104, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202105 <- mutate(trip_data_202105, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202106 <- mutate(trip_data_202106, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202107 <- mutate(trip_data_202107, ride_length = seconds_to_period(ended_at - started_at))
+trip_data_202108 <- mutate(trip_data_202108, ride_length = seconds_to_period(ended_at - started_at))
+## trip_data_202109 <- mutate(trip_data_202109, ride_length = seconds_to_period(ended_at - started_at))
+```
+
+The file for the trip_data_202109 data stores start times and end times as characters. These need to be changed to datetime values before adding the ride_length column.
+
+```{r changing trip_data_202109 data types}
+example_trip_data <- trip_data_202109 %>% 
+  mutate(started_at_new = as.POSIXct(trip_data_202109$started_at, tz="UTC")) %>% 
+  mutate(ended_at_new = as.POSIXct(trip_data_202109$ended_at, tz="UTC"))
+
+trip_data_202109 <- subset(example_trip_data, select = -c(started_at, ended_at)) %>% 
+  relocate(started_at = started_at_new, .after = rideable_type) %>% 
+  relocate(ended_at = ended_at_new, .after = started_at)
+```
+
+
+Finishing the previous step, adding column for ride_length to 202109
+```{r finishing adding ride_length}
+trip_data_202109 <- mutate(trip_data_202109, ride_length = seconds_to_period(ended_at - started_at))
+```
+
+### 4.2 Adding column for day_of_week to each file
+In order to do analysis of data by day of week, we will need a numerical representation of each day. Adding a column to each file with the following meaning:
+1 = Sunday, 2 = Monday, ... 7 = Saturday
+
+```{r adding day_of_week column}
+trip_data_202010 <- mutate(trip_data_202010, day_of_week = wday(trip_data_202010$started_at))
+trip_data_202011 <- mutate(trip_data_202011, day_of_week = wday(trip_data_202011$started_at))
+trip_data_202012 <- mutate(trip_data_202012, day_of_week = wday(trip_data_202012$started_at))
+trip_data_202101 <- mutate(trip_data_202101, day_of_week = wday(trip_data_202101$started_at))
+trip_data_202102 <- mutate(trip_data_202102, day_of_week = wday(trip_data_202102$started_at))
+trip_data_202103 <- mutate(trip_data_202103, day_of_week = wday(trip_data_202103$started_at))
+trip_data_202104 <- mutate(trip_data_202104, day_of_week = wday(trip_data_202104$started_at))
+trip_data_202105 <- mutate(trip_data_202105, day_of_week = wday(trip_data_202105$started_at))
+trip_data_202106 <- mutate(trip_data_202106, day_of_week = wday(trip_data_202106$started_at))
+trip_data_202107 <- mutate(trip_data_202107, day_of_week = wday(trip_data_202107$started_at))
+trip_data_202108 <- mutate(trip_data_202108, day_of_week = wday(trip_data_202108$started_at))
+trip_data_202109 <- mutate(trip_data_202109, day_of_week = wday(trip_data_202109$started_at))
+```
+
+### 4.3 Checking column names for consistency
+
+```{r checking column names}
+colnames(trip_data_202010)
+colnames(trip_data_202011)
+colnames(trip_data_202012)
+colnames(trip_data_202101)
+colnames(trip_data_202102)
+colnames(trip_data_202103)
+colnames(trip_data_202104)
+colnames(trip_data_202105)
+colnames(trip_data_202106)
+colnames(trip_data_202107)
+colnames(trip_data_202108)
+colnames(trip_data_202109)
+```
+
+All column names are consistent. Inspecting data frames for incongruities.
+
+```{r checking data types}
+str(trip_data_202010) #station ids are double, change to char
+str(trip_data_202011) #station ids are double, change to char
+str(trip_data_202012)
+str(trip_data_202101)
+str(trip_data_202102)
+str(trip_data_202103)
+str(trip_data_202104)
+str(trip_data_202105)
+str(trip_data_202106)
+str(trip_data_202107)
+str(trip_data_202108)
+str(trip_data_202109)
+```
+
+The datasets for 202010 and 202011 have station ids set as double data types. These need to be converted to char data types so that they can merge correctly.
+
+```{r}
+trip_data_202010 <- mutate(trip_data_202010, start_station_id = as.character(start_station_id), 
+                           end_station_id = as.character(end_station_id))
+trip_data_202011 <- mutate(trip_data_202011, start_station_id = as.character(start_station_id),
+                           end_station_id = as.character(end_station_id))
+```
+
+### 4.4 Merge individual months into one single data frame
+
+```{r merging data frames}
+all_trips <- bind_rows(trip_data_202010, trip_data_202011, trip_data_202012, trip_data_202101, trip_data_202102, trip_data_202103, trip_data_202104, trip_data_202105, trip_data_202106, trip_data_202107, trip_data_202108, trip_data_202109)
+```
+
+
+### 4.5 Creating seasonal data frames
+In preparation for seasonal analysis, data frames for each season need to be created.
+
+```{r creating seasonal data frames}
+spring_trips <- bind_rows(trip_data_202103, trip_data_202104, trip_data_202105)
+summer_trips <- bind_rows(trip_data_202106, trip_data_202107, trip_data_202108)
+autumn_trips <- bind_rows(trip_data_202010, trip_data_202011)
+winter_trips <- bind_rows(trip_data_202012, trip_data_202101, trip_data_202102)
+```
+
+
+### 4.6 Clean up and organize data to prepare for analysis
+Inspecting the merged data frame all_trips for any issues.
+
+```{r inspecting the all_trips data frame}
+colnames(all_trips)  #List of column names
+nrow(all_trips)  #How many rows are in data frame?
+dim(all_trips)  #Dimensions of the data frame?
+head(all_trips)  #See the first 6 rows of data frame.  
+tail(all_trips)  #See the last 6 rows of data frame.
+str(all_trips)  #See list of columns and data types (numeric, character, etc)
+summary(all_trips)  #Statistical summary of data. Mainly for numerics
+table(all_trips$rideable_type)  #Count of each type of bike used
+table(all_trips$day_of_week)  #Count of total rides per day of week
+table(all_trips$member_casual)  #Count of total casual and member riders
+```
+
+There are a few problems we will need to fix:
+* (1)  The data can only be aggregated at the rider level, which is too granular. We will need to add some additional columns -- such as day, month, year -- that provide additional opportunities to aggregate the data.
+* (2)  We will want to add "ride_length" to the entire data frame for consistency.
+* (3)  There are rides with ride_length values that are negative. We will want to delete those rides.
+
+Fixing issue (1) - Add columns for day, month, year
+
+```{r adding column in all_trips for day, month, year}
+all_trips$date <- as.Date(all_trips$started_at) #The default format is yyyy-mm-dd
+all_trips$month <- format(as.Date(all_trips$date), "%m")
+all_trips$day <- format(as.Date(all_trips$date), "%d")
+all_trips$year <- format(as.Date(all_trips$date), "%Y")
+all_trips$day_of_week <- format(as.Date(all_trips$date), "%A")
+all_trips <- mutate(all_trips, day_of_week_as_number = wday(all_trips$started_at))
+```
+
+Doing the same for the seasonal data frames
+
+```{r adding columns seasonal data frames for day, month, year}
+spring_trips$date <- as.Date(spring_trips$started_at) #The default format is yyyy-mm-dd
+spring_trips$month <- format(as.Date(spring_trips$date), "%m")
+spring_trips$day <- format(as.Date(spring_trips$date), "%d")
+spring_trips$year <- format(as.Date(spring_trips$date), "%Y")
+spring_trips$day_of_week <- format(as.Date(spring_trips$date), "%A")
+spring_trips <- mutate(spring_trips, day_of_week_as_number = wday(spring_trips$started_at))
+
+summer_trips$date <- as.Date(summer_trips$started_at) #The default format is yyyy-mm-dd
+summer_trips$month <- format(as.Date(summer_trips$date), "%m")
+summer_trips$day <- format(as.Date(summer_trips$date), "%d")
+summer_trips$year <- format(as.Date(summer_trips$date), "%Y")
+summer_trips$day_of_week <- format(as.Date(summer_trips$date), "%A")
+summer_trips <- mutate(summer_trips, day_of_week_as_number = wday(summer_trips$started_at))
+
+autumn_trips$date <- as.Date(autumn_trips$started_at) #The default format is yyyy-mm-dd
+autumn_trips$month <- format(as.Date(autumn_trips$date), "%m")
+autumn_trips$day <- format(as.Date(autumn_trips$date), "%d")
+autumn_trips$year <- format(as.Date(autumn_trips$date), "%Y")
+autumn_trips$day_of_week <- format(as.Date(autumn_trips$date), "%A")
+autumn_trips <- mutate(autumn_trips, day_of_week_as_number = wday(autumn_trips$started_at))
+
+winter_trips$date <- as.Date(winter_trips$started_at) #The default format is yyyy-mm-dd
+winter_trips$month <- format(as.Date(winter_trips$date), "%m")
+winter_trips$day <- format(as.Date(winter_trips$date), "%d")
+winter_trips$year <- format(as.Date(winter_trips$date), "%Y")
+winter_trips$day_of_week <- format(as.Date(winter_trips$date), "%A")
+winter_trips <- mutate(winter_trips, day_of_week_as_number = wday(winter_trips$started_at))
+```
+
+Inspect the structure of the columns
+
+```{r inspect structure of all_trips}
+str(all_trips)
+```
+
+
+Add a "ride_length" calculation to all_trips (in seconds)
+
+```{r add ride_length column to all_trips data frame}
+all_trips$ride_length_seconds <- difftime(all_trips$ended_at,all_trips$started_at)
+
+spring_trips$ride_length_seconds <- difftime(spring_trips$ended_at,spring_trips$started_at)
+summer_trips$ride_length_seconds <- difftime(summer_trips$ended_at,summer_trips$started_at)
+autumn_trips$ride_length_seconds <- difftime(autumn_trips$ended_at,autumn_trips$started_at)
+winter_trips$ride_length_seconds <- difftime(winter_trips$ended_at,winter_trips$started_at)
+```
+
+Convert "ride_length" from Factor to numeric so we can run calculations on the data.
+
+```{r convert ride_length from factor to numeric}
+is.factor(all_trips$ride_length_seconds)
+all_trips$ride_length_seconds <- as.numeric(as.character(all_trips$ride_length_seconds))
+is.numeric(all_trips$ride_length_seconds)
+
+spring_trips$ride_length_seconds <- as.numeric(as.character(spring_trips$ride_length_seconds))
+summer_trips$ride_length_seconds <- as.numeric(as.character(summer_trips$ride_length_seconds))
+autumn_trips$ride_length_seconds <- as.numeric(as.character(autumn_trips$ride_length_seconds))
+winter_trips$ride_length_seconds <- as.numeric(as.character(winter_trips$ride_length_seconds))
+```
+
+### 4.7 Remove "bad" data
+The data frame includes thousands of entries where bikes were taken out of docks and checked for quality by Divvy or where the ride_length was negative. A new version of the data frame (v2) was created by removing quality check trips. A new version of the data frame (v3) was created by removing any null trips.  
+
+```{r remove bad data, creating all_trips_v2}
+count(all_trips, ride_length_seconds < 0) # Shows that thousands of trips have negative ride_length
+table(all_trips$start_station_name) # Looking for staff maintenance trips
+
+all_trips_v2 <- all_trips[!(all_trips$start_station_name == "HQ QR" | all_trips$ride_length<0),]
+# That created rows of NA, so we now need to remove them.
+all_trips_v3 <- all_trips_v2 %>%  drop_na()
+
+spring_trips_v2 <- spring_trips[!(spring_trips$start_station_name == "HQ QR" | spring_trips$ride_length<0),]
+# That created rows of NA, so we now need to remove them.
+spring_trips_v3 <- spring_trips_v2 %>%  drop_na()
+
+summer_trips_v2 <- summer_trips[!(summer_trips$start_station_name == "HQ QR" | summer_trips$ride_length<0),]
+# That created rows of NA, so we now need to remove them.
+summer_trips_v3 <- summer_trips_v2 %>%  drop_na()
+
+autumn_trips_v2 <- autumn_trips[!(autumn_trips$start_station_name == "HQ QR" | autumn_trips$ride_length<0),]
+# That created rows of NA, so we now need to remove them.
+autumn_trips_v3 <- autumn_trips_v2 %>%  drop_na()
+
+winter_trips_v2 <- winter_trips[!(winter_trips$start_station_name == "HQ QR" | winter_trips$ride_length<0),]
+# That created rows of NA, so we now need to remove them.
+winter_trips_v3 <- winter_trips_v2 %>%  drop_na()
+```
+
+### 4.8 Saving cleaned and useful datasets
+```{r saving cleaned and useful datasets}
+write.csv(all_trips_v3, file = "/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/all_trips_v3.csv")
+
+write.csv(spring_trips_v3, file = "/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/spring_trips_v3.csv")
+
+write.csv(summer_trips_v3, file = "/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/summer_trips_v3.csv")
+
+write.csv(autumn_trips_v3, file = "/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/autumn_trips_v3.csv")
+
+write.csv(winter_trips_v3, file = "/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Trip Data/winter_trips_v3.csv")
+```
+
+

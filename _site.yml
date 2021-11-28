@@ -1,11 +1,19 @@
-name: "my-website"
+name: "Cyclistic Case Study"
+
 navbar:
-  title: "My Website"
+  title: "Cyclistic Case Study"
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "Data Cleaning"
+      href: Cyclistic_Case_Study_Data_Cleaning.html
+    - text: "Analysis Code"
+      href: Cyclistic_Case_Study_Analysis.html
+    - text: "Final Report"
+      href: Cyclistic_Case_Study_Final_Report.html
 
+output:   
+  rmdformats::robobook:
+    self_contained: true
 
 output_dir: docs
