@@ -35,16 +35,14 @@ As previously mentioned, there are two types of customers of Cyclistic Bikes. Ca
 
 There is a significant difference in the length of ride for the two types of riders. As shown below, the casual rider takes an average of 30-40 minutes per trip while members take 10-20 minutes per trip. This is true for each day of the week with slightly longer trips on the weekends and shorter trips on weekdays for both casual riders and members.
 
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, casual vs member-1.png)
-
+![](/Cyclistic_Bikes/Visuals/average_ride_time_by_rider_type.png)
 After filtering data by season, there was no significant change between the seasons compared to the full year.
 
 
-
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-2.png)
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-4.png)
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-6.png)
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-8.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_spring.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_summer.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_autumn.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/average_ride_time_by_rider_type_winter.png)
 
 ### 3.2 Total Number of Rides
 
@@ -54,16 +52,16 @@ The graph below shows that on Saturdays and Sundays, casual riders are the leadi
 
 However, during the week on Monday through Friday, the casual riders drop off significantly and the members become the top riders. For example, on Wednesdays, members account for about 150,000 more trips across the year.
 
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for total rides, casual vs member-1.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type.png)
 
 This time, separating the year-long data into seasonal parts adds to the story. The graphs below show that while the seasonal changes do affect the total number of trips taken by Cyclistic customers, the members are more dependable than the casual riders. This reinforces the idea that getting more customers to convert to the yearly membership can have a positive impact on Cyclistic's profits.
 
 
 
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-1.png)
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-3.png)
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-5.png)
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for average ride time per day, separated by season, casual vs member-7.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_spring.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_summer.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_autumn.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/total_rides_by_rider_type_winter.png)
 
 ### 3.3 Top Trip Routes
 
@@ -78,9 +76,9 @@ In contrast, the top trip routes for members include several route pairs where o
 Further analysis would be necessary to identify and confirm the route behavior of the two rider types.
 
 
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for top 10 trips, casual vs member-2.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/top_routes_casuals.png)
 
-![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/docs/Cyclistic_Case_Study_Analysis_files/figure-html/viz for top 10 trips, casual vs member-1.png)
+![](/Users/Steve/Desktop/Google DA Cert/Capstone Materials/Track 1 - Bike-share/Visuals/top_routes_members.png)
 
 # 4. Summary of Findings
 
